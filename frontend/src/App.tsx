@@ -1,29 +1,61 @@
+/**
+ * App.tsx
+ * -------
+ * This is the main controller for the entire application.
+ * It handles:
+ * - Navigation between screens
+ * - Saving notes
+ * - Saving EMT incidents
+ * - Editing existing incidents
+ * - Viewing incident history
+ */
+
 import { useState } from "react";
 import "./App.css";
 
+// Components
 import Navbar from "./components/Navbar";
 
+// Note Screens
 import NewNote from "./pages/NewNote";
 import ViewNote from "./pages/ViewNote";
+
+// EMT Screens
 import EMTDashboard from "./pages/EMTDashboard";
 import EMTIncident from "./pages/EMTIncident";
+import EMTIncidentHistory from "./pages/EMTIncidentHistory";
+import EMTIncidentView from "./pages/EMTIncidentView";
 
+// Hooks
 import useLocalNotes from "./hooks/useLocalNotes";
+import useLocalIncidents from "./hooks/useLocalIncidents";
+
+// Types
 import type { Note } from "./types/Note";
+import type { EMTIncidentData } from "./pages/EMTIncident";
 
 /**
  * ViewState controls which screen is visible.
+ * Each screen has its own shape.
  */
 type ViewState =
   | { name: "home" }
   | { name: "new" }
   | { name: "view"; id: string }
   | { name: "emt" }
-  | { name: "emt-incident" };
+  | { name: "emt-incident" }
+  | { name: "emt-edit"; index: number }   // <-- NEW: Edit existing incident
+  | { name: "emt-history" }
+  | { name: "emt-view"; index: number };
 
 function App() {
   const [view, setView] = useState<ViewState>({ name: "home" });
+
+  // Notes storage
   const { notes, setNotes } = useLocalNotes();
+
+  // EMT incidents storage
+  const { incidents, setIncidents } = useLocalIncidents();
 
   /**
    * Save a new note and navigate to its detail view.
@@ -59,6 +91,26 @@ function App() {
     URL.revokeObjectURL(url);
   }
 
+  /**
+   * Save or update an EMT incident.
+   * If editIndex is provided → overwrite existing incident.
+   * Otherwise → create a new one.
+   */
+  function handleSaveIncident(data: EMTIncidentData, editIndex?: number) {
+    if (editIndex !== undefined) {
+      // Overwrite existing incident
+      const updated = [...incidents];
+      updated[editIndex] = data;
+      setIncidents(updated);
+    } else {
+      // Create new incident
+      setIncidents([data, ...incidents]);
+    }
+
+    // Return to EMT dashboard
+    setView({ name: "emt" });
+  }
+
   // Find the note currently being viewed
   const currentNote =
     view.name === "view" ? notes.find((n) => n.id === view.id) : null;
@@ -89,6 +141,7 @@ function App() {
                 EMT Mode
               </button>
 
+              {/* Notes list */}
               {notes.length === 0 ? (
                 <div className="text-white/50">No recent notes</div>
               ) : (
@@ -110,26 +163,52 @@ function App() {
 
           {/* EMT DASHBOARD */}
           {view.name === "emt" && (
-            <EMTDashboard
-              onStart={() => setView({ name: "emt-incident" })}
-              onContinue={() =>
-                setView({ name: "view", id: notes[0]?.id || "" })
-              }
-              onView={() => setView({ name: "home" })}
-            />
-          )}
-
-          {/* EMT INCIDENT SCREEN */}
-          {view.name === "emt-incident" && (
-  <EMTIncident
-    onSave={(data) => {
-      console.log("Incident saved:", data);
-      setView({ name: "emt" });
-    }}
-    onCancel={() => setView({ name: "emt" })} // ← This already acts as a back button
+  <EMTDashboard
+    onStart={() => setView({ name: "emt-incident" })}
+    onContinue={() =>
+      incidents.length > 0
+        ? setView({ name: "emt-edit", index: 0 })
+        : null
+    }
+    onView={() => setView({ name: "emt-history" })}
+    onHome={() => setView({ name: "home" })}   // <-- ADD THIS
   />
 )}
 
+          {/* NEW EMT INCIDENT */}
+          {view.name === "emt-incident" && (
+            <EMTIncident
+              onSave={handleSaveIncident}
+              onCancel={() => setView({ name: "emt" })}
+            />
+          )}
+
+          {/* EDIT EXISTING INCIDENT */}
+          {view.name === "emt-edit" && (
+            <EMTIncident
+              initialData={incidents[view.index]}
+              editIndex={view.index}
+              onSave={handleSaveIncident}
+              onCancel={() => setView({ name: "emt" })}
+            />
+          )}
+
+          {/* INCIDENT HISTORY */}
+          {view.name === "emt-history" && (
+            <EMTIncidentHistory
+              incidents={incidents}
+              onSelect={(index) => setView({ name: "emt-view", index })}
+              onBack={() => setView({ name: "emt" })}
+            />
+          )}
+
+          {/* VIEW INCIDENT */}
+          {view.name === "emt-view" && (
+            <EMTIncidentView
+              incident={incidents[view.index]}
+              onBack={() => setView({ name: "emt-history" })}
+            />
+          )}
 
           {/* NEW NOTE */}
           {view.name === "new" && (

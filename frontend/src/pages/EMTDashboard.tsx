@@ -1,39 +1,54 @@
-interface EMTDashboardProps {
+/**
+ * EMTDashboard.tsx
+ * -----------------
+ * Main EMT landing screen.
+ * Provides:
+ * - Start New Incident
+ * - Continue Last Incident
+ * - View Saved Incidents
+ * - Back to Home
+ */
+
+interface Props {
   onStart: () => void;
   onContinue: () => void;
   onView: () => void;
+  onHome: () => void;   // <-- NEW
 }
 
-export default function EMTDashboard({
-  onStart,
-  onContinue,
-  onView,
-}: EMTDashboardProps) {
+export default function EMTDashboard({ onStart, onContinue, onView, onHome }: Props) {
   return (
-    <div className="flex flex-col items-center gap-8 py-12">
-      <h1 className="text-4xl font-bold tracking-tight mb-4">
-        EMT Dashboard
-      </h1>
+    <div className="flex flex-col gap-6">
+
+      {/* Back to Home */}
+      <button
+        onClick={onHome}
+        className="text-white bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg w-fit"
+      >
+        ← Back to Home
+      </button>
+
+      <h1 className="text-3xl font-bold">EMT Dashboard</h1>
 
       <button
         onClick={onStart}
-        className="w-full max-w-md bg-brand-500 hover:bg-brand-600 text-white text-xl py-4 rounded-lg shadow transition-all hover:scale-105"
+        className="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg"
       >
-        🚑 Start New Incident
+        Start New Incident
       </button>
 
       <button
         onClick={onContinue}
-        className="w-full max-w-md bg-slate-700 hover:bg-slate-600 text-white text-xl py-4 rounded-lg shadow transition-all hover:scale-105"
+        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
       >
-        📄 Continue Last Incident
+        Continue Last Incident
       </button>
 
       <button
         onClick={onView}
-        className="w-full max-w-md bg-slate-800 hover:bg-slate-700 text-white text-xl py-4 rounded-lg shadow transition-all hover:scale-105"
+        className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg"
       >
-        📁 View Saved Incidents
+        View Saved Incidents
       </button>
     </div>
   );

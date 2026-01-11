@@ -1,21 +1,15 @@
 /**
  * EMTIncident.tsx
  * ----------------
- * This is the main EMT workspace screen.
- * It now includes:
- * - Timeline quick actions
- * - Notes
- * - Vitals logging
- * - Condition tags
- * - Save + Cancel
+ * This screen is used for BOTH:
+ *  - Creating a new incident
+ *  - Editing an existing incident
+ *
+ * If initialData is provided, the form loads in EDIT MODE.
  */
 
 import { useState } from "react";
 
-/**
- * This defines the shape of the incident data
- * that gets passed back to App.tsx when saved.
- */
 export interface EMTIncidentData {
   timeline: string[];
   notes: string;
@@ -25,25 +19,31 @@ export interface EMTIncidentData {
 }
 
 interface EMTIncidentProps {
-  onSave: (data: EMTIncidentData) => void;
+  onSave: (data: EMTIncidentData, editIndex?: number) => void;
   onCancel: () => void;
+
+  // Optional props for editing an existing incident
+  initialData?: EMTIncidentData;
+  editIndex?: number;
 }
 
-export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
-  // Timeline entries (Arrival, Patient Contact, etc.)
-  const [timeline, setTimeline] = useState<string[]>([]);
-
-  // Freeform notes
-  const [notes, setNotes] = useState("");
-
-  // Vitals log (BP, Pulse, etc.)
-  const [vitals, setVitals] = useState<string[]>([]);
-
-  // Condition tags (Conscious, Shock, Trauma, etc.)
-  const [conditions, setConditions] = useState<string[]>([]);
+export default function EMTIncident({
+  onSave,
+  onCancel,
+  initialData,
+  editIndex,
+}: EMTIncidentProps) {
+  /**
+   * Load initial data if editing an existing incident.
+   * Otherwise start with empty fields.
+   */
+  const [timeline, setTimeline] = useState<string[]>(initialData?.timeline || []);
+  const [notes, setNotes] = useState(initialData?.notes || "");
+  const [vitals, setVitals] = useState<string[]>(initialData?.vitals || []);
+  const [conditions, setConditions] = useState<string[]>(initialData?.conditions || []);
 
   /**
-   * Adds a timestamped event to the timeline.
+   * Add a timestamped event to the timeline.
    */
   function addEvent(label: string) {
     const time = new Date().toLocaleTimeString();
@@ -51,7 +51,8 @@ export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
   }
 
   /**
-   * Saves the entire incident and returns it to App.tsx.
+   * Save the incident.
+   * If editIndex is provided, App.tsx will overwrite the old incident.
    */
   function handleSave() {
     const incident: EMTIncidentData = {
@@ -59,24 +60,29 @@ export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
       notes,
       vitals,
       conditions,
-      createdAt: new Date().toISOString(),
+      createdAt: initialData?.createdAt || new Date().toISOString(),
     };
 
-    onSave(incident);
+    onSave(incident, editIndex);
   }
 
   return (
     <div className="flex flex-col gap-10">
+
+      {/* BACK BUTTON */}
       <button
-  onClick={onCancel}
-  className="text-white bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg w-fit"
->
-  ← Back
-</button>
-      {/* Title */}
-      <h1 className="text-3xl font-bold">EMT Incident</h1>
-      
-      {/* QUICK ACTION TIMELINE BUTTONS */}
+        onClick={onCancel}
+        className="text-white bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg w-fit"
+      >
+        ← Back
+      </button>
+
+      {/* TITLE */}
+      <h1 className="text-3xl font-bold">
+        {initialData ? "Edit Incident" : "New EMT Incident"}
+      </h1>
+
+      {/* TIMELINE BUTTONS */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Timeline Events</h2>
 
@@ -100,7 +106,7 @@ export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
         </div>
       </div>
 
-      {/* VITALS SECTION */}
+      {/* VITALS */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Vitals</h2>
 
@@ -156,7 +162,7 @@ export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
         </div>
       </div>
 
-      {/* NOTES SECTION */}
+      {/* NOTES */}
       <div>
         <label className="block text-lg font-semibold mb-2">Notes</label>
         <textarea
@@ -191,7 +197,7 @@ export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
         </ul>
       </div>
 
-      {/* CONDITION TAGS DISPLAY */}
+      {/* CONDITIONS DISPLAY */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Active Conditions</h2>
         <div className="flex flex-wrap gap-2">
@@ -206,13 +212,13 @@ export default function EMTIncident({ onSave, onCancel }: EMTIncidentProps) {
         </div>
       </div>
 
-      {/* ACTION BUTTONS */}
+      {/* SAVE BUTTON */}
       <div className="flex gap-4">
         <button
           onClick={handleSave}
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg"
         >
-          Save Incident
+          {initialData ? "Save Changes" : "Save Incident"}
         </button>
 
         <button
