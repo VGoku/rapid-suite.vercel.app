@@ -102,119 +102,145 @@ export default function EMTIncidentHistory({
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* BACK BUTTON */}
-      <button
-        onClick={onBack}
-        className="text-white bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg w-fit"
-      >
-        ← Back
-      </button>
+  <div className="flex flex-col gap-6 text-slate-800 dark:text-slate-100">
 
-      <h1 className="text-3xl font-bold">Saved EMT Incidents</h1>
+    {/* BACK BUTTON */}
+    <button
+      onClick={onBack}
+      className="
+        px-4 py-2 rounded-lg w-fit font-medium
+        bg-slate-200 text-slate-800 hover:bg-slate-300
+        dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600
+      "
+    >
+      ← Back
+    </button>
 
-      {/* SEARCH BAR */}
-      <div>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search incidents..."
-          className="w-full p-3 rounded-lg bg-slate-800 text-white"
-        />
-      </div>
+    {/* TITLE */}
+    <h1 className="text-3xl font-bold">Saved EMT Incidents</h1>
 
-      {/* CONDITION FILTER CHIPS */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          "Conscious",
-          "Unconscious",
-          "Breathing",
-          "Not Breathing",
-          "Bleeding",
-          "Shock",
-          "Cardiac",
-          "Trauma",
-        ].map((conditionLabel) => (
-          <button
-            key={conditionLabel}
-            onClick={() => {
-              setActiveConditions((prev) =>
-                prev.includes(conditionLabel)
-                  ? prev.filter((c) => c !== conditionLabel)
-                  : [...prev, conditionLabel]
-              );
-            }}
-            className={`px-3 py-1 rounded-lg border text-sm ${
-              activeConditions.includes(conditionLabel)
-                ? "bg-green-600 border-green-700"
-                : "bg-slate-800 border-slate-700"
-            }`}
-          >
-            {conditionLabel}
-          </button>
-        ))}
-      </div>
-
-      {/* DATE FILTER BUTTONS */}
-      <div className="flex gap-3">
-        {[
-          { label: "All", value: "all" as DateFilterOption },
-          { label: "Today", value: "today" as DateFilterOption },
-          { label: "Last 7 Days", value: "7" as DateFilterOption },
-          { label: "Last 30 Days", value: "30" as DateFilterOption },
-        ].map((filterOption) => (
-          <button
-            key={filterOption.value}
-            onClick={() => setDateFilter(filterOption.value)}
-            className={`px-4 py-2 rounded-lg text-sm ${
-              dateFilter === filterOption.value
-                ? "bg-blue-600"
-                : "bg-slate-800 border border-slate-700"
-            }`}
-          >
-            {filterOption.label}
-          </button>
-        ))}
-      </div>
-
-      {/* INCIDENT LIST */}
-      <div className="flex flex-col gap-4">
-        {filteredIncidents.length === 0 && (
-          <p className="text-white/60">No incidents match your filters.</p>
-        )}
-
-        {filteredIncidents.map((incident, index) => (
-          <div
-            key={index}
-            onClick={() => onSelect(incident, index)}
-            className="bg-slate-800 p-4 rounded-lg cursor-pointer hover:bg-slate-700"
-          >
-            <h2 className="text-xl font-semibold">
-              Incident #{index + 1}
-            </h2>
-
-            <p className="text-white/70 text-sm">
-              {new Date(incident.createdAt).toLocaleString()}
-            </p>
-
-            <p className="mt-2 text-white/80 text-sm line-clamp-2">
-              {incident.notes || "No notes recorded."}
-            </p>
-
-            <div className="flex flex-wrap gap-2 mt-3">
-              {incident.conditions.map((condition, i) => (
-                <span
-                  key={i}
-                  className="px-2 py-1 bg-green-700 rounded text-xs"
-                >
-                  {condition}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+    {/* SEARCH BAR */}
+    <div>
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search incidents..."
+        className="
+          w-full p-3 rounded-lg
+          bg-white text-slate-800 border border-slate-300
+          dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700
+        "
+      />
     </div>
-  );
+
+    {/* CONDITION FILTER CHIPS */}
+    <div className="flex flex-wrap gap-2">
+      {[
+        "Conscious",
+        "Unconscious",
+        "Breathing",
+        "Not Breathing",
+        "Bleeding",
+        "Shock",
+        "Cardiac",
+        "Trauma",
+      ].map((conditionLabel) => (
+        <button
+          key={conditionLabel}
+          onClick={() => {
+            setActiveConditions((prev) =>
+              prev.includes(conditionLabel)
+                ? prev.filter((c) => c !== conditionLabel)
+                : [...prev, conditionLabel]
+            );
+          }}
+          className={`
+            px-3 py-1 rounded-lg border text-sm font-medium
+            ${
+              activeConditions.includes(conditionLabel)
+                ? "bg-green-600 text-white border-green-700 dark:bg-green-500 dark:border-green-600"
+                : "bg-slate-200 text-slate-800 border-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600"
+            }
+          `}
+        >
+          {conditionLabel}
+        </button>
+      ))}
+    </div>
+
+    {/* DATE FILTER BUTTONS */}
+    <div className="flex gap-3">
+      {[
+        { label: "All", value: "all" as DateFilterOption },
+        { label: "Today", value: "today" as DateFilterOption },
+        { label: "Last 7 Days", value: "7" as DateFilterOption },
+        { label: "Last 30 Days", value: "30" as DateFilterOption },
+      ].map((filterOption) => (
+        <button
+          key={filterOption.value}
+          onClick={() => setDateFilter(filterOption.value)}
+          className={`
+            px-4 py-2 rounded-lg text-sm font-medium
+            ${
+              dateFilter === filterOption.value
+                ? "bg-blue-600 text-white dark:bg-blue-500 dark:hover:bg-blue-400"
+                : "bg-slate-200 text-slate-800 border border-slate-300 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600 dark:hover:bg-slate-600"
+            }
+          `}
+        >
+          {filterOption.label}
+        </button>
+      ))}
+    </div>
+
+    {/* INCIDENT LIST */}
+    <div className="flex flex-col gap-4">
+      {filteredIncidents.length === 0 && (
+        <p className="text-slate-500 dark:text-slate-400">
+          No incidents match your filters.
+        </p>
+      )}
+
+      {filteredIncidents.map((incident, index) => (
+        <div
+          key={index}
+          onClick={() => onSelect(incident, index)}
+          className="
+            p-4 rounded-xl cursor-pointer transition shadow-sm
+            bg-white text-slate-800 border border-slate-200 hover:bg-slate-50
+            dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700
+          "
+        >
+          <h2 className="text-xl font-semibold">
+            Incident #{index + 1}
+          </h2>
+
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
+            {new Date(incident.createdAt).toLocaleString()}
+          </p>
+
+          <p className="mt-2 text-slate-700 dark:text-slate-300 text-sm line-clamp-2">
+            {incident.notes || "No notes recorded."}
+          </p>
+
+          <div className="flex flex-wrap gap-2 mt-3">
+            {incident.conditions.map((condition, i) => (
+              <span
+                key={i}
+                className="
+                  px-2 py-1 rounded text-xs font-medium
+                  bg-green-600 text-white
+                  dark:bg-green-500 dark:text-white
+                "
+              >
+                {condition}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 }

@@ -27,33 +27,39 @@ export default function ViewNote({
   }
 
   return (
-    <article className="max-w-3xl mx-auto p-6 rounded-lg bg-surface border border-white/10 shadow-md text-white">
-      {/* Header: title + timestamp + actions */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold">{note.title}</h2>
-          <div className="text-sm text-white/60">
-            {formatTimestamp(note.timestamp)}
-          </div>
-        </div>
-
-        <div className="flex gap-2">
-          <Button variant="primary" onClick={onEdit}>
-            Edit
-          </Button>
-          <Button variant="danger" onClick={onDelete}>
-            Delete
-          </Button>
-          <Button variant="ghost" onClick={onExport}>
-            Export
-          </Button>
+  <article
+    className="
+      max-w-3xl mx-auto p-6 rounded-xl shadow-sm
+      bg-white text-slate-800 border border-slate-200
+      dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700
+    "
+  >
+    {/* HEADER: title + timestamp + actions */}
+    <div className="mb-6 flex items-center justify-between">
+      <div>
+        <h2 className="text-2xl font-semibold">{note.title}</h2>
+        <div className="text-sm text-slate-600 dark:text-slate-400">
+          {formatTimestamp(note.timestamp)}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="prose prose-invert text-white/90">
-        <p>{note.content}</p>
+      <div className="flex gap-2">
+        <Button variant="primary" onClick={onEdit}>
+          Edit
+        </Button>
+        <Button variant="danger" onClick={onDelete}>
+          Delete
+        </Button>
+        <Button variant="ghost" onClick={onExport}>
+          Export
+        </Button>
       </div>
-    </article>
-  );
+    </div>
+
+    {/* CONTENT */}
+    <div className="prose text-slate-700 dark:text-slate-300">
+      <p>{note.content}</p>
+    </div>
+  </article>
+);
 }

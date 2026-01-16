@@ -44,42 +44,57 @@ export default function NewNote({
   }
 
   return (
-    <main className="p-6 text-white bg-bg min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Create New Note</h1>
+  <main
+    className="
+      p-6 min-h-screen
+      bg-slate-50 text-slate-800
+      dark:bg-slate-900 dark:text-slate-100
+    "
+  >
+    <h1 className="text-3xl font-bold mb-6">Create New Note</h1>
 
-      <div className="flex flex-col gap-4 max-w-xl">
-        {/* Title */}
-        <input
-          className="p-3 rounded-md bg-surface border border-white/10 text-white"
-          placeholder="Note title..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+    <div className="flex flex-col gap-4 max-w-xl">
 
-        {/* Content */}
-        <textarea
-          className="p-3 rounded-md bg-surface border border-white/10 text-white min-h-[150px]"
-          placeholder="Write your note..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
+      {/* TITLE INPUT */}
+      <input
+        className="
+          p-3 rounded-md
+          bg-white text-slate-800 border border-slate-300
+          dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700
+        "
+        placeholder="Note title..."
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+      />
 
-        {/* Tags placeholder (you will connect TagSelector later) */}
-        <div className="text-white/60 text-sm">
-          Tags feature coming soon...
-        </div>
+      {/* CONTENT INPUT */}
+      <textarea
+        className="
+          p-3 rounded-md min-h-[150px]
+          bg-white text-slate-800 border border-slate-300
+          dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700
+        "
+        placeholder="Write your note..."
+        value={content}
+        onChange={(event) => setContent(event.target.value)}
+      />
 
-        {/* Actions */}
-<div className="flex gap-3">
-  <Button variant="primary" onClick={handleSave}>
-    Save Note
-  </Button>
-
-  <Button variant="ghost" onClick={onCancel}>
-    Cancel
-  </Button>
-</div>
+      {/* TAGS PLACEHOLDER */}
+      <div className="text-slate-600 dark:text-slate-400 text-sm">
+        Tags feature coming soon...
       </div>
-    </main>
-  );
+
+      {/* ACTION BUTTONS */}
+      <div className="flex gap-3">
+        <Button variant="primary" onClick={handleSave}>
+          Save Note
+        </Button>
+
+        <Button variant="ghost" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </div>
+  </main>
+);
 }

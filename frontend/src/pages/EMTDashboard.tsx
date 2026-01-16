@@ -20,33 +20,55 @@ export default function EMTDashboard({ onStart, onContinue, onView, onHome }: Pr
   return (
     <div className="flex flex-col gap-6">
 
-      {/* Back to Home */}
+      {/* BACK TO HOME */}
       <button
         onClick={onHome}
-        className="text-white bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg w-fit"
+        className="
+          px-4 py-2 rounded-lg w-fit font-medium
+          bg-slate-200 text-slate-800 hover:bg-slate-300
+          dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600
+        "
       >
         ← Back to Home
       </button>
 
-      <h1 className="text-3xl font-bold">EMT Dashboard</h1>
+      {/* TITLE */}
+      <h1 className="text-3xl font-bold text-slate-800 dark:text-white">
+        EMT Dashboard
+      </h1>
 
+      {/* START NEW INCIDENT */}
       <button
         onClick={onStart}
-        className="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg"
+        className="
+          px-6 py-3 rounded-lg text-lg font-medium
+          bg-blue-600 text-white hover:bg-blue-700
+          dark:bg-blue-500 dark:hover:bg-blue-400
+        "
       >
         Start New Incident
       </button>
 
+      {/* CONTINUE LAST INCIDENT */}
       <button
         onClick={onContinue}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
+        className="
+          px-6 py-3 rounded-lg text-lg font-medium
+          bg-green-600 text-white hover:bg-green-700
+          dark:bg-green-500 dark:hover:bg-green-400
+        "
       >
         Continue Last Incident
       </button>
 
+      {/* VIEW SAVED INCIDENTS */}
       <button
         onClick={onView}
-        className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg"
+        className="
+          px-6 py-3 rounded-lg text-lg font-medium
+          bg-slate-200 text-slate-800 hover:bg-slate-300
+          dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600
+        "
       >
         View Saved Incidents
       </button>
