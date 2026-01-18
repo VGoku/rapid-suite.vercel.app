@@ -12,6 +12,7 @@
  * - Edit button for quick access
  */
 
+import { useState, useEffect } from "react";
 import type { ViewState } from "../App";
 import type { FireIncidentData } from "../types/FireIncidentData";
 
@@ -22,9 +23,20 @@ type Props = {
 };
 
 export default function FireIncidentView({ incident, index, setView }: Props) {
+  const [modalImage, setModalImage] = useState<string | null>(null);
+
   // ------------------------------------------------------------
   // Severity dot color helper
   // ------------------------------------------------------------
+   // Close modal with ESC key
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setModalImage(null);
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   const severityColor: Record<string, string> = {
     Low: "bg-green-500",
     Moderate: "bg-yellow-500",
@@ -61,7 +73,6 @@ export default function FireIncidentView({ incident, index, setView }: Props) {
         </button>
       </div>
 
-      {/* CREATED DATE */}
       <p className="text-white/70">Created: {incident.timestamp}</p>
 
       {/* FIRE TYPE */}
@@ -125,7 +136,7 @@ export default function FireIncidentView({ incident, index, setView }: Props) {
         <div>
           <h2 className="text-xl font-semibold mb-1">Tags</h2>
           <div className="flex flex-wrap gap-2">
-            {incident.tags.map((tag: string) => (
+            {incident.tags.map((tag) => (
               <span
                 key={tag}
                 className="px-3 py-1 bg-slate-700 rounded-lg text-white text-sm"
@@ -142,7 +153,7 @@ export default function FireIncidentView({ incident, index, setView }: Props) {
         <div>
           <h2 className="text-xl font-semibold mb-1">Units Responding</h2>
           <div className="flex flex-wrap gap-2">
-            {incident.units.map((unit: string) => (
+            {incident.units.map((unit) => (
               <span
                 key={unit}
                 className="px-3 py-1 bg-slate-700 rounded-lg text-white text-sm"
@@ -159,16 +170,11 @@ export default function FireIncidentView({ incident, index, setView }: Props) {
         <div>
           <h2 className="text-xl font-semibold mb-1">Timeline</h2>
           <ul className="bg-slate-800 p-4 rounded-lg space-y-2">
-            {incident.timeline.map(
-              (
-                item: { time: string; event: string },
-                i: number
-              ) => (
-                <li key={i}>
-                  <strong>{item.time}</strong> — {item.event}
-                </li>
-              )
-            )}
+            {incident.timeline.map((item, i) => (
+              <li key={i}>
+                <strong>{item.time}</strong> — {item.event}
+              </li>
+            ))}
           </ul>
         </div>
       )}
@@ -180,25 +186,40 @@ export default function FireIncidentView({ incident, index, setView }: Props) {
 
           {/* Desktop Grid */}
           <div className="hidden md:grid grid-cols-4 gap-3">
-            {incident.photos.map((src: string, i: number) => (
+            {incident.photos.map((src, i) => (
               <img
                 key={i}
                 src={src}
-                className="w-full h-24 object-cover rounded-lg border border-slate-700"
+                onClick={() => setModalImage(src)}
+                className="w-full h-24 object-cover rounded-lg border border-slate-700 cursor-pointer hover:opacity-80"
               />
             ))}
           </div>
 
-          {/* Mobile Horizontal Scroll */}
+          {/* Mobile Scroll */}
           <div className="md:hidden flex gap-3 overflow-x-auto">
-            {incident.photos.map((src: string, i: number) => (
+            {incident.photos.map((src, i) => (
               <img
                 key={i}
                 src={src}
-                className="w-24 h-24 object-cover rounded-lg border border-slate-700 flex-shrink-0"
+                onClick={() => setModalImage(src)}
+                className="w-24 h-24 object-cover rounded-lg border border-slate-700 flex-shrink-0 cursor-pointer hover:opacity-80"
               />
             ))}
           </div>
+        </div>
+      )}
+
+      {/* FULLSCREEN MODAL */}
+      {modalImage && (
+        <div
+          onClick={() => setModalImage(null)}
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer"
+        >
+          <img
+            src={modalImage}
+            className="max-w-[90%] max-h-[90%] rounded-lg shadow-xl"
+          />
         </div>
       )}
     </div>

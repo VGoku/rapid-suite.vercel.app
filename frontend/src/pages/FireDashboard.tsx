@@ -4,7 +4,7 @@
  * Main dashboard for Firefighter mode.
  *
  * Features:
- * - Quick navigation (New Incident, History)
+ * - Quick navigation (New Incident, History, Tools)
  * - Quick Stats (total incidents, high severity count, common fire type, last incident)
  * - Clean layout matching the rest of the app
  */
@@ -117,17 +117,19 @@ export default function FireDashboard({ setView, fireIncidents }: FireDashboardP
         >
           Incident History
         </button>
-      </div>
 
-      {/* Placeholder for future features */}
-      <div
-        className="
-          p-4 rounded-lg border
-          bg-white border-slate-200 text-slate-600
-          dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400
-        "
-      >
-        Firefighter tools coming soon...
+        {/* Tools */}
+        <button
+          onClick={() => setView({ name: "fire-tools" })}
+          className="
+            p-4 rounded-lg border
+            bg-white border-slate-200 text-slate-700
+            dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300
+            shadow-sm hover:shadow-md transition
+          "
+        >
+          Firefighter Tools
+        </button>
       </div>
     </div>
   );

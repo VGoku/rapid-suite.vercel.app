@@ -14,7 +14,6 @@
  */
 
 import { useState, useEffect } from "react";
-import "./App.css";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -39,6 +38,11 @@ import FireIncident from "./pages/FireIncident";
 import FireIncidentHistory from "./pages/FireIncidentHistory";
 import FireIncidentView from "./pages/FireIncidentView";
 import FireIncidentEdit from "./pages/FireIncidentEdit";
+import FireTools from "./pages/FireTools";
+import FireToolsPPE from "./pages/FireToolsPPE";
+import FireToolsHazmat from "./pages/FireToolsHazmat";
+import FireToolsHydrants from "./pages/FireToolsHydrants";
+import FireToolsPrePlan from "./pages/FireToolsPrePlan";
 
 // Hooks
 import useLocalNotes from "./hooks/useLocalNotes";
@@ -68,7 +72,17 @@ export type ViewState =
   | { name: "fire-edit"; index: number }
   | { name: "fire-history" }
   | { name: "fire-view"; index: number }
-  | { name: "fire-continue" };
+  | { name: "fire-continue" }
+  | { name: "fire-tools" }
+  | { name: "fire-tools-ppe" }
+  | { name: "fire-tools-hydrants" }
+  | { name: "fire-tools-hazmat" }
+  | { name: "fire-tools-preplans" }
+  | { name: "fire-preplan" };
+
+/**
+ * Main application component.
+ */
 
 function App() {
   const [view, setView] = useState<ViewState>({ name: "home" });
@@ -195,9 +209,7 @@ function App() {
             <Settings onBack={() => setView({ name: "home" })} />
           )}
 
-          {/* ------------------------------------------------ */}
-          {/* EMT SCREENS                                      */}
-          {/* ------------------------------------------------ */}
+          {/* EMT SCREENS */}
 
           {view.name === "emt" && (
             <EMTDashboard
@@ -245,16 +257,28 @@ function App() {
             />
           )}
 
-          {/* ------------------------------------------------ */}
-          {/* FIREFIGHTER SCREENS                              */}
-          {/* ------------------------------------------------ */}
-
+          
+          {/* FIREFIGHTER SCREENS*/}
+          
           {view.name === "fire-dashboard" && (
             <FireDashboard
               setView={setView}
               fireIncidents={fireIncidents}
             />
           )}
+
+          {view.name === "fire-tools" && (
+          <FireTools setView={setView} />
+          )}
+
+          {view.name === "fire-tools-ppe" && (
+          <FireToolsPPE setView={setView} />
+          )}
+
+          {view.name === "fire-preplan" && (
+         <FireToolsPrePlan setView={setView} />
+          )}
+
 
           {view.name === "fire-incident" && (
             <FireIncident
@@ -285,6 +309,18 @@ function App() {
     incident={fireIncidents[view.index]}
     index={view.index}
   />
+)}
+
+{view.name === "fire-tools-hydrants" && (
+  <FireToolsHydrants setView={setView} />
+)}
+
+{view.name === "fire-tools-hazmat" && (
+  <FireToolsHazmat setView={setView} />
+)}
+
+{view.name === "fire-tools-preplans" && (
+  <div className="p-4 text-white">Pre-Plan Notes coming soon...</div>
 )}
 
           {/* ------------------------------------------------ */}
