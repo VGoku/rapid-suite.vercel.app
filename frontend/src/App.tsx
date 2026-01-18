@@ -44,6 +44,20 @@ import FireToolsHazmat from "./pages/FireToolsHazmat";
 import FireToolsHydrants from "./pages/FireToolsHydrants";
 import FireToolsPrePlan from "./pages/FireToolsPrePlan";
 
+// Police Screens
+import PoliceDashboard from "./pages/PoliceDashboard";
+import PoliceTrafficStop from "./pages/PoliceTrafficStop";
+import PoliceDomesticCall from "./pages/PoliceDomesticCall";
+import PoliceSuspiciousPerson from "./pages/PoliceSuspiciousPerson";
+import PoliceTheftBurglary from "./pages/PoliceTheftBurglary";
+import PoliceOfficerActions from "./pages/PoliceOfficerActions";
+import PoliceEvidencePhotos from "./pages/PoliceEvidencePhotos";
+import PoliceStatements from "./pages/PoliceStatements";
+import PoliceGeneralNotes from "./pages/PoliceGeneralNotes";
+import PoliceSceneLog from "./pages/PoliceSceneLog";
+import PoliceBoloBoard from "./pages/PoliceBoloBoard";
+import PoliceIncidentGenerator from "./pages/PoliceIncidentGenerator";
+
 // Hooks
 import useLocalNotes from "./hooks/useLocalNotes";
 import useLocalIncidents from "./hooks/useLocalIncidents";
@@ -78,8 +92,19 @@ export type ViewState =
   | { name: "fire-tools-hydrants" }
   | { name: "fire-tools-hazmat" }
   | { name: "fire-tools-preplans" }
-  | { name: "fire-preplan" };
-
+  | { name: "fire-preplan" }
+  | { name: "police-dashboard" }
+  | { name: "police-traffic" }
+  | { name: "police-domestic" }
+  | { name: "police-theft" }
+  | { name: "police-suspicious" }
+  | { name: "police-actions" }
+  | { name: "police-evidence" }
+  | { name: "police-statements" }
+  | { name: "police-notes" }
+  | { name: "police-scene-log" }
+  | { name: "police-bolo" }
+  | { name: "police-incident-generator" };
 /**
  * Main application component.
  */
@@ -323,6 +348,66 @@ function App() {
   <div className="p-4 text-white">Pre-Plan Notes coming soon...</div>
 )}
 
+          {/* POLICE SCREENS */}
+
+          {view.name === "police-dashboard" && (
+  <PoliceDashboard setView={setView} />
+)}
+
+{/* POLICE: Traffic Stop */}
+{view.name === "police-traffic" && (
+  <PoliceTrafficStop setView={setView} />
+)}
+
+{/* POLICE: Domestic Call */}
+{view.name === "police-domestic" && (
+  <PoliceDomesticCall setView={setView} />
+)}
+
+{/* Police: Suspicious Person */}
+{view.name === "police-suspicious" && (
+  <PoliceSuspiciousPerson setView={setView} />
+)}
+
+{/* Police: Theft/Burglary */}
+{view.name === "police-theft" && (
+  <PoliceTheftBurglary setView={setView} />
+)}
+
+{/* Police: Officer Actions */}
+{view.name === "police-actions" && (
+  <PoliceOfficerActions setView={setView} />
+)}
+
+{/* Police: Evidence Photos */}
+{view.name === "police-evidence" && (
+  <PoliceEvidencePhotos setView={setView} />
+)}
+
+{/* Police: Statements */}
+{view.name === "police-statements" && (
+  <PoliceStatements setView={setView} />
+)}
+
+{/* Police: General Notes */}
+{view.name === "police-notes" && (
+  <PoliceGeneralNotes setView={setView} />
+)}
+
+{/* Police: Scene Log */}
+{view.name === "police-scene-log" && (
+  <PoliceSceneLog setView={setView} />
+)}
+
+{/* Police: BOLO Board */}
+{view.name === "police-bolo" && (
+  <PoliceBoloBoard setView={setView} />
+)}
+
+{/* Police: Incident Generator */}
+{view.name === "police-incident-generator" && (
+  <PoliceIncidentGenerator setView={setView} />
+)}
           {/* ------------------------------------------------ */}
           {/* NOTES                                            */}
           {/* ------------------------------------------------ */}

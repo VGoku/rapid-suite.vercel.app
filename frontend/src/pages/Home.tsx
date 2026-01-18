@@ -61,6 +61,17 @@ export default function Home({ setView, notes }: HomeProps) {
         Firefighter Mode
       </button>
 
+      {/* POLICE MODE BUTTON */}
+      <button
+  onClick={() => setView({ name: "police-dashboard" })}
+  className="
+    px-6 py-3 rounded-lg text-lg mb-6 font-medium
+    bg-blue-600 text-white hover:bg-blue-700
+    dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white
+  "
+>
+  Police Mode
+</button>
       {/* SETTINGS BUTTON */}
       <button
         onClick={() => setView({ name: "settings" })}
